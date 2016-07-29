@@ -1,0 +1,19 @@
+api:
+    resource: "@ApiBundle/Resources/config/routing.yml"
+    prefix:   /
+
+api_machin:
+  pattern: /api/v1/example
+  defaults: { _controller:ApiBundle:Default:Index }
+
+new_game:
+  pattern: /api/newgame/{difficulty}/{playerId}
+  defaults: { _controller:ApiBundle:Default:NewGame }
+
+save_score:
+  pattern: /api/savescore/{matchId}/{playerId}/{time}
+  defaults: { _controller:ApiBundle:Default:SaveScore }
+
+get_timer:
+  pattern: /api/gettimer/{matchId}/{playerId}
+  defaults: { _controller:ApiBundle:Default:GetTimer }

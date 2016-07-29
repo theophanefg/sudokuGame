@@ -1,0 +1,14 @@
+services:
+#    api.example:
+#        class: ApiBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]
+
+
+    api.match_maker:
+        class:  ApiBundle\services\MatchManager
+        arguments: [@doctrine]
+
+    api.grid_generator:
+        class:  ApiBundle\services\GridGenerator
+        arguments: []
+
