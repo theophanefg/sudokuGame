@@ -31,7 +31,9 @@ class DefaultController extends Controller
     public function saveScoreAction(Request $request, $matchId, $playerId, $time)
     {
     	$matchManager = new MatchManager($this->getDoctrine());
-    	$matchManager->saveScore($matchId, $playerId, $time);
+    	$winnerStatus = $matchManager->saveScore($matchId, $playerId, $time);
+
+    	return new Response(json_encode($winnerStatus));
     }
 
     public function getTimerAction(Request $request, $matchId, $playerId)

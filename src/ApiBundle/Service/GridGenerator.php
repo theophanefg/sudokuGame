@@ -74,30 +74,280 @@ class GridGenerator
     
     public function getGrid() 
     {
-    	$grid = $this->getRandGrid();
-    	return $grid;
+    	$gridString = $this->getGridString();
+	  	$completedGrid = $this->getCompletedGrid($gridString);
+	  	$cleanGrid = $this->getCleanGrid($gridString);
+	  	return $this->shuffleGrids($completedGrid, $cleanGrid);
     }
 
     // returns randomly one the base grids depending on difficulty
-    public function getRandGrid() 
-    {
-    	$gridIndex  = rand(0,9);
-    	switch ($this->difficulty) {
-    		case 'easy':
-    			$grid = $this->easyGrids[$gridIndex];
-    			break;
+  
+   
+
+	private function getGridString()
+	{
+      	$grid = '';
+      	$gridIndex  = rand(0,9);
+
+		switch ($this->difficulty) {
+			case 'easy':
+				//$grid = $this->easyGrids[$gridIndex];
+				$grid = '076142893392865417184379562435718926627934185918526734861257349749683251253491678576142893392865417184379562435718926627934185918526734861257349749683251253491678';
+				break;
 			case 'medium':
-    			$grid = $this->mediumGrids[$gridIndex];
-    			break;
+				$grid = $this->mediumGrids[$gridIndex];
+				break;
 			case 'hard':
-    			$grid = $this->hardGrids[$gridIndex];
-    			break;
-    		case 'extreme':
-    			$grid = $this->extremeGrids[$gridIndex];
-    			break;
-    		case defaut:
-    	}
-    	return $grid;
+				$grid = $this->hardGrids[$gridIndex];
+				break;
+			case 'extreme':
+				$grid = $this->extremeGrids[$gridIndex];
+				break;
+			case defaut:
+		}
+		return $grid;
+    }
+    //**************** GRID SHUFFLING FUNCTIONS********************
+
+    private function shuffleGrids($completedGrid, $cleanGrid) 
+    {
+      $shuffledGrids = array();
+      array_push($shuffledGrids, $cleanGrid, $completedGrid);
+
+      // random number of random shuffle operation
+      $nShuffles = rand(10,40); // 10 a 40
+      for ($i=0; $i<$nShuffles; $i++) {
+        $actionNumber = rand(0,3); // 0 a 3
+        $row1;
+        $row2;
+        $col1;
+        $col2;
+        switch($actionNumber) {
+          case 0:
+            $row1 = rand(0,2) ;
+            $row2 = rand(0,2) ;
+            while($row1 == $row2) {
+              $row2 = rand(0,2) ;
+            }
+            $shuffledGrids[0] = $this->shuffleSquareRows($shuffledGrids[0], $row1, $row2);
+            $shuffledGrids[1] = $this->shuffleSquareRows($shuffledGrids[1], $row1, $row2);
+            break;
+          case 1:
+            $col1 = rand(0,2) ;
+            $col2 = rand(0,2) ;
+            while($col1 == $col2) {
+              $col2 = rand(0,2) ;
+            }
+            $shuffledGrids[0] = $this->shuffleSquareCols($shuffledGrids[0], $col1, $col2);
+            $shuffledGrids[1] = $this->shuffleSquareCols($shuffledGrids[1], $col1, $col2);
+            break;
+          case 2:
+            $rowSqu = rand(0,2);
+            $row1 = $rowSqu*3 + rand(0,2) ;
+            $row2 = $rowSqu*3 + rand(0,2) ;
+            while($row1 == $row2) {
+              $row2 = $rowSqu*3 + rand(0,2) ;
+            }
+            $shuffledGrids[0] = $this->shuffleRows($shuffledGrids[0], $row1, $row2);
+            $shuffledGrids[1] = $this->shuffleRows($shuffledGrids[1], $row1, $row2);
+            break;
+          case 3:
+            $colSqu = rand(0,2);
+            $col1 = $colSqu*3 + rand(0,2) ;
+            $col2 = $colSqu*3 + rand(0,2) ;
+            while($col1 == $col2) {
+              $col2 = $colSqu*3 + rand(0,2) ;
+            }
+            $shuffledGrids[0] = $this->shuffleCols($shuffledGrids[0], $col1, $col2);
+            $shuffledGrids[1] = $this->shuffleCols($shuffledGrids[1], $col1, $col2);
+            break;
+          default:
+            break;
+        }
+      }
+
+      // random number of digit swap operations
+      $nDigitShuffle = rand(2,7); // 2 a 7
+      for ($i=0; $i<$nDigitShuffle; $i++) {
+        $digit1 = rand(1,9);
+        $digit2 = rand(1,9);
+        while ($digit1 == $digit2) {
+          $digit2 = rand(1,9);
+        }
+        $shuffledGrids[0] = $this->swapDigits($shuffledGrids[0], $digit1, $digit2);
+        $shuffledGrids[1] = $this->swapDigits($shuffledGrids[1], $digit1, $digit2);
+      }
+      return $shuffledGrids;
+    }
+
+    private function shuffleSquareRows($grid , $row1, $row2) //row value between 0 and 2
+    { 
+      //console.log('---shuffleSquareRow---');
+
+      $shuffledGrid = array();
+      for($i = 0; $i< 9; $i++) {
+        $row = array();
+        $j = 0;
+        if(($i-$i%3)/3 == $row1) {
+          //console.log('cond 1');
+          for($j = 0; $j< 9; $j++) {
+            array_push($row,$grid[($row2-$row1)*3+$i][$j]);
+          }
+        }
+        else if(($i-$i%3)/3 == $row2) {
+          //console.log('cond 2');
+          for($j = 0; $j< 9; $j++) {
+            array_push($row,$grid[($row1-$row2)*3+$i][$j]);
+          }
+        }
+        else {
+          //console.log('cond 3');
+          for($j = 0; $j< 9; $j++) {
+            array_push($row,$grid[$i][$j]);
+          }
+        }
+        array_push($shuffledGrid,$row);
+      }
+      return $shuffledGrid;
+    }
+
+    private function shuffleRows($grid, $row1, $row2) 
+    {
+      //console.log('---ShuffleRows---');
+      $shuffledGrid = array();
+      for($i = 0; $i< 9; $i++) {
+        $row = array();
+        $j = 0;
+        if($i == $row1) {
+          //console.log('cond 1');
+          for($j = 0; $j< 9; $j++) {
+            array_push($row,$grid[$row2][$j]);
+          }
+        }
+        else if($i == $row2) {
+          //console.log('cond 2');
+          for($j = 0; $j< 9; $j++) {
+            array_push($row,$grid[$row1][$j]);
+          }
+        }
+        else {
+          //console.log('cond 3');
+          for($j = 0; $j< 9; $j++) {
+            array_push($row,$grid[$i][$j]);
+          }
+        }
+
+        array_push($shuffledGrid,$row);
+      }
+      return $shuffledGrid;
+    }
+
+    private function shuffleSquareCols($grid, $col1, $col2) //col value between 0 and 2
+    { 
+      //console.log('---shuffleSquareCols---');
+      $shuffledGrid = array();
+
+      for($i = 0; $i< 9; $i++) {
+        $row = array();
+        for($j = 0; $j< 9; $j++) {
+          if(($j-$j%3)/3 == $col1) {
+            //console.log('cond 1');
+            array_push($row,$grid[$i][($col2-$col1)*3+$j]);
+          }
+          else if (($j-$j%3)/3 == $col2) {
+            //console.log('cond 2');
+            array_push($row,$grid[$i][($col1-$col2)*3+$j]);
+          }
+          else {
+            //console.log('cond 3');
+            array_push($row,$grid[$i][$j]);
+          }
+
+        }
+        array_push($shuffledGrid,$row);
+      }
+      return $shuffledGrid;
+    }
+
+    private function shuffleCols ($grid, $col1, $col2) 
+    {
+      //console.log('---shuffleCols---');
+      $shuffledGrid = array();
+
+      for($i = 0; $i< 9; $i++) {
+        $row = array();
+        for($j = 0; $j< 9; $j++) {
+          if($j == $col1) {
+            //console.log('cond 1');
+            array_push($row,$grid[$i][$col2]);
+          }
+          else if ($j == $col2) {
+            //console.log('cond 2');
+            array_push($row,$grid[$i][$col1]);
+          }
+          else {
+            //console.log('cond 3');
+            array_push($row,$grid[$i][$j]);
+          }
+
+        }
+        array_push($shuffledGrid,$row);
+      }
+      return $shuffledGrid;
+    }
+
+    private function swapDigits($grid, $digit1, $digit2) 
+    {
+      //console.log('---swapDigits---');
+      $shuffledGrid = array();
+      for($i = 0; $i< 9; $i++) {
+        $row = array();
+        for($j = 0; $j< 9; $j++) {
+          $val = $grid[$i][$j];
+          if($val == $digit1) {
+            array_push($row,(string)$digit2);
+          }
+          else if($val == $digit2) {
+            array_push($row,(string)$digit1);
+          }
+          else {
+            array_push($row,$val);
+          }
+        }
+        array_push($shuffledGrid,$row);
+      }
+      return $shuffledGrid;
+    }    
+	private function getCompletedGrid($gridString) 
+	{
+	  $comGridString = substr($gridString,81,81);
+
+	  return $this->parseStringToGrid($comGridString);
+    }
+
+    private function getCleanGrid($gridString) 
+    {
+      $cleanGridString = substr($gridString,0,81);
+      return $this->parseStringToGrid($cleanGridString);
+    }
+
+    private function parseStringToGrid($string) 
+    {
+      $grid = array();
+      for ($i = 0; $i<9; $i++) {
+        $row = array();
+        for ($j = 0; $j<9; $j++) {
+          $val = $string[$i * 9 + $j];
+          if($val == 0) {
+          	array_push($row, ' ');
+          }
+          else {
+            array_push($row, $val);
+          }
+        }
+        array_push($grid, $row);
+      }
+      return $grid;
     }
 
 

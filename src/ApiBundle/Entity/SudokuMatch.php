@@ -29,58 +29,58 @@ class SudokuMatch
     private $difficulty;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(name="grid", type="string")
+     * @ORM\Column(name="grid", type="array")
      */
     private $grid;
 
     /**
-     * @var int
+     * @var array
      *
-     * @ORM\Column(name="winner", type="integer")
+     * @ORM\Column(name="winner", type="array")
      */
     private $winner;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="player1", type="integer")
+     * @ORM\Column(name="player1", type="integer", nullable=true)
      */
     private $player1Id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="player2", type="integer")
+     * @ORM\Column(name="player2", type="integer", nullable=true)
      */
     private $player2Id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="p1StartTime", type="integer")
+     * @ORM\Column(name="p1StartTime", type="integer", nullable=true)
      */
     private $p1StartTime;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="p2StartTime", type="integer")
+     * @ORM\Column(name="p2StartTime", type="integer", nullable=true)
      */
     private $p2StartTime;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="p1CompletionTime", type="integer")
+     * @ORM\Column(name="p1CompletionTime", type="integer", nullable=true)
      */
     private $p1CompletionTime;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="p2CompletionTime", type="integer")
+     * @ORM\Column(name="p2CompletionTime", type="integer", nullable=true)
      */
     private $p2CompletionTime;
 
@@ -129,7 +129,7 @@ class SudokuMatch
     /**
      * Set grid
      *
-     * @param string $grid
+     * @param array $grid
      * @return SudokuMatch
      */
     public function setGrid($grid)
@@ -142,7 +142,7 @@ class SudokuMatch
     /**
      * Get grid
      *
-     * @return string 
+     * @return array 
      */
     public function getGrid()
     {

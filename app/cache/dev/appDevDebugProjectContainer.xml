@@ -582,7 +582,7 @@
     </parameter>
   </parameters>
   <services>
-    <service id="api.match_maker" class="ApiBundle\services\MatchMaker">
+    <service id="api.match_maker" class="ApiBundle\services\MatchManager">
       <argument type="service" id="doctrine"/>
     </service>
     <service id="api.grid_generator" class="ApiBundle\services\GridGenerator"/>
@@ -1787,7 +1787,7 @@
       <argument type="collection">
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>579b69d9f02ba5.67650248</argument>
+            <argument>579fbb1e8156e7.74711289</argument>
           </service>
         </argument>
       </argument>
@@ -1916,7 +1916,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.token_storage"/>
-            <argument>579b69d9f02ba5.67650248</argument>
+            <argument>579fbb1e8156e7.74711289</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
             <argument type="service" id="security.authentication.manager"/>
           </service>

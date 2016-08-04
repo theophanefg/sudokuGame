@@ -65,14 +65,18 @@ class MatchManager
 
         // we look for the match with matching id and we load it
         $match = $dbRepo->findOneBy(array('id' => $matchId));
-        $playerIndex = getPlayerIndex($match, $playerId);
+        $playerIndex = $this->getPlayerIndex($match, $playerId);
         if($playerIndex == 1) {
             $match->setP1CompletionTime($time);
         }
         else if ($playerIndex == 2) {
             $match->setP2CompletionTime($time);
         }
-        $winnerStatus = getWinnerStatus($match, $playerIndex);
+        
+        $em->flush();
+        $winnerStatus = $this->getWinnerStatus($match, $playerIndex);
+        return $winnerStatus;
+
     }
 
     public function leaveMatch($matchId, $playerId) 
@@ -95,11 +99,12 @@ class MatchManager
 
     private function getPlayerIndex($match, $playerId) 
     {
+        
         $playerIndex = 1;
         if($match->getPlayer2Id() == $playerId) {
             $playerIndex = 2;
         }
-        return playerIndex;
+        return $playerIndex;
     }
 
     private function getStartTime($match, $playerId)
@@ -119,18 +124,20 @@ class MatchManager
         $scoreP1 = $match->getP1CompletionTime();
         $scoreP2 = $match->getP2CompletionTime();
         $winnerIndex = 0;
-        if(!$scoreP1 || !$scoreP2) {
-            $winnerStatus = 3;
-        }
-        else if($scoreP1 < $scoreP2) {
+        if(!$scoreP1 || !$scoreP2) 
+            $winnerIndex = 3;
+        else if($scoreP1 < $scoreP2)  
             $winnerIndex = 1;
-        }
-        else {
+        else 
             $winnerIndex = 2;
-        }
 
-        
+        if ($winnerIndex == 3)
+            $winnerStatus = 3;
+        else if ($winnerIndex == $playerIndex) 
+            $winnerStatus = 1;
+        else
+            $winnerStatus = 2;
 
-
+        return $winnerStatus;
     }
 }

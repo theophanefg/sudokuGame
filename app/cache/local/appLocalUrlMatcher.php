@@ -120,17 +120,14 @@ class appLocalUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirect
                 return array (  '_controller' => 'ApiBundle\\Controller\\DefaultController::IndexAction',  '_route' => 'api_machin',);
             }
 
-            if (0 === strpos($pathinfo, '/api/newgame')) {
-                // new_game
-                if (preg_match('#^/api/newgame/(?P<difficulty>[^/]++)/(?P<playerId>[^/]++)$#s', $pathinfo, $matches)) {
-                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'new_game')), array (  '_controller' => 'ApiBundle\\Controller\\DefaultController::NewGameAction',));
-                }
+            // new_game
+            if (0 === strpos($pathinfo, '/api/newgame') && preg_match('#^/api/newgame/(?P<difficulty>[^/]++)/(?P<playerId>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'new_game')), array (  '_controller' => 'ApiBundle\\Controller\\DefaultController::NewGameAction',));
+            }
 
-                // save_score
-                if (preg_match('#^/api/newgame/(?P<matchId>[^/]++)/(?P<playerId>[^/]++)/(?P<time>[^/]++)$#s', $pathinfo, $matches)) {
-                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'save_score')), array (  '_controller' => 'ApiBundle\\Controller\\DefaultController::SaveScoreAction',));
-                }
-
+            // save_score
+            if (0 === strpos($pathinfo, '/api/savescore') && preg_match('#^/api/savescore/(?P<matchId>[^/]++)/(?P<playerId>[^/]++)/(?P<time>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'save_score')), array (  '_controller' => 'ApiBundle\\Controller\\DefaultController::SaveScoreAction',));
             }
 
             // get_timer
