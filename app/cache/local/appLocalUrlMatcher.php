@@ -130,9 +130,27 @@ class appLocalUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirect
                 return $this->mergeDefaults(array_replace($matches, array('_route' => 'save_score')), array (  '_controller' => 'ApiBundle\\Controller\\DefaultController::SaveScoreAction',));
             }
 
-            // get_timer
-            if (0 === strpos($pathinfo, '/api/gettimer') && preg_match('#^/api/gettimer/(?P<matchId>[^/]++)/(?P<playerId>[^/]++)$#s', $pathinfo, $matches)) {
-                return $this->mergeDefaults(array_replace($matches, array('_route' => 'get_timer')), array (  '_controller' => 'ApiBundle\\Controller\\DefaultController::GetTimerAction',));
+            if (0 === strpos($pathinfo, '/api/get')) {
+                // get_timer
+                if (0 === strpos($pathinfo, '/api/gettimer') && preg_match('#^/api/gettimer/(?P<matchId>[^/]++)/(?P<playerId>[^/]++)$#s', $pathinfo, $matches)) {
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'get_timer')), array (  '_controller' => 'ApiBundle\\Controller\\DefaultController::GetTimerAction',));
+                }
+
+                // get_recent_results
+                if (0 === strpos($pathinfo, '/api/getrecentresults') && preg_match('#^/api/getrecentresults/(?P<playerId>[^/]++)$#s', $pathinfo, $matches)) {
+                    return $this->mergeDefaults(array_replace($matches, array('_route' => 'get_recent_results')), array (  '_controller' => 'ApiBundle\\Controller\\DefaultController::GetRecentResultsAction',));
+                }
+
+            }
+
+            // forfeit_match
+            if (0 === strpos($pathinfo, '/api/forfeitmatch') && preg_match('#^/api/forfeitmatch/(?P<matchId>[^/]++)/(?P<playerId>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'forfeit_match')), array (  '_controller' => 'ApiBundle\\Controller\\DefaultController::ForfeitMatchAction',));
+            }
+
+            // get_match_status
+            if (0 === strpos($pathinfo, '/api/getmatchstatus') && preg_match('#^/api/getmatchstatus/(?P<matchId>[^/]++)/(?P<playerId>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'get_match_status')), array (  '_controller' => 'ApiBundle\\Controller\\DefaultController::GetMatchStatusAction',));
             }
 
         }

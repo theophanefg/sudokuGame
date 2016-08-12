@@ -17,3 +17,15 @@ save_score:
 get_timer:
   pattern: /api/gettimer/{matchId}/{playerId}
   defaults: { _controller:ApiBundle:Default:GetTimer }
+
+get_recent_results:
+  pattern: /api/getrecentresults/{playerId}
+  defaults: { _controller:ApiBundle:Default:GetRecentResults }
+
+forfeit_match:
+  pattern: /api/forfeitmatch/{matchId}/{playerId}
+  defaults: { _controller:ApiBundle:Default:ForfeitMatch }
+
+get_match_status:
+  pattern: /api/getmatchstatus/{matchId}/{playerId}
+  defaults: { _controller:ApiBundle:Default:GetMatchStatus }

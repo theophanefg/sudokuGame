@@ -43,4 +43,28 @@ class DefaultController extends Controller
 
 		return new Response(json_encode($timer));
     }
+
+    public function getRecentResultsAction(Request $request, $playerId)
+    {
+    	$matchManager = new MatchManager($this->getDoctrine());
+    	$recentResults = $matchManager->getRecentResults($playerId);
+		return new Response(json_encode($recentResults));
+    }
+
+    public function forfeitMatchAction(Request $request, $matchId, $playerId)
+    {
+    	$matchManager = new MatchManager($this->getDoctrine());
+    	$response = $matchManager->forfeitMatch($matchId, $playerId);
+    	return new Response(json_encode($response));
+    }
+
+    public function getMatchStatus(Request $request, $matchId, $playerId)
+    {
+    	//return match status, 0 for match still going
+    	// 1 for match surrendered by p1, 2 for match surrendered by p2
+    	$matchManager = new MatchManager($this->getDoctrine());
+    	$matchStatus = $matchManager->getMatchStatus($matchId, $playerId);
+    	return new Response(json_encode($matchStatus));
+    }
+
 }

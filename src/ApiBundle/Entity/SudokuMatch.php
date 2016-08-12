@@ -38,7 +38,7 @@ class SudokuMatch
     /**
      * @var array
      *
-     * @ORM\Column(name="winner", type="array")
+     * @ORM\Column(name="winner", type="integer", nullable=true)
      */
     private $winner;
 
@@ -83,6 +83,20 @@ class SudokuMatch
      * @ORM\Column(name="p2CompletionTime", type="integer", nullable=true)
      */
     private $p2CompletionTime;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="checkedByP1", type="integer", nullable=true)
+     */
+    private $checkedByP1;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="checkedByP2", type="integer", nullable=true)
+     */
+    private $checkedByP2;
 
     public function __construct($difficulty, $grid, $playerId, $startTime)
     {
@@ -310,5 +324,51 @@ class SudokuMatch
     public function getP2CompletionTime()
     {
         return $this->p2CompletionTime;
+    }
+
+    /**
+     * Set checkedByP1
+     *
+     * @param integer $checkedByP1
+     * @return SudokuMatch
+     */
+    public function setCheckedByP1($checkedByP1)
+    {
+        $this->checkedByP1 = $checkedByP1;
+
+        return $this;
+    }
+
+    /**
+     * Get checkedByP1
+     *
+     * @return integer 
+     */
+    public function getCheckedByP1()
+    {
+        return $this->checkedByP1;
+    }
+
+    /**
+     * Set checkedByP2
+     *
+     * @param integer $checkedByP2
+     * @return SudokuMatch
+     */
+    public function setCheckedByP2($checkedByP2)
+    {
+        $this->checkedByP2 = $checkedByP2;
+
+        return $this;
+    }
+
+    /**
+     * Get checkedByP2
+     *
+     * @return integer 
+     */
+    public function getCheckedByP2()
+    {
+        return $this->checkedByP2;
     }
 }
